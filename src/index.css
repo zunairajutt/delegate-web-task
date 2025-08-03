@@ -2,39 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* AI Dashboard Design System - Professional & Sophisticated */
 
 @layer base {
   :root {
+    /* Core backgrounds */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: 215 25% 27%;
+    
+    /* Dashboard backgrounds */
+    --dashboard-bg: 220 14% 96%;
+    --dashboard-surface: 0 0% 100%;
+    
+    /* Card system */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 215 25% 27%;
+    --card-border: 220 13% 91%;
+    
+    /* Popover system */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --popover-foreground: 215 25% 27%;
+    
+    /* AI Primary - Deep indigo for professional AI feel */
+    --primary: 231 48% 48%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 231 48% 42%;
+    --primary-light: 231 48% 95%;
+    
+    /* AI Secondary - Purple accent for tech sophistication */
+    --secondary: 270 95% 75%;
+    --secondary-foreground: 270 95% 25%;
+    --secondary-hover: 270 95% 70%;
+    --secondary-light: 270 95% 97%;
+    
+    /* Status colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 76% 95%;
+    
+    --warning: 43 96% 56%;
+    --warning-foreground: 43 96% 15%;
+    --warning-light: 43 96% 95%;
+    
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-light: 0 72% 95%;
+    
+    /* Neutral system */
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
+    --muted-darker: 215 25% 27%;
+    
+    --accent: 220 14% 96%;
+    --accent-foreground: 215 25% 27%;
+    
+    /* Borders and inputs */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 231 48% 48%;
+    
+    /* AI Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(231 48% 48%), hsl(270 95% 75%));
+    --gradient-surface: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 14% 98%));
+    --gradient-header: linear-gradient(135deg, hsl(231 48% 48%) 0%, hsl(231 48% 42%) 100%);
+    
+    /* Professional shadows */
+    --shadow-sm: 0 1px 2px hsl(215 25% 27% / 0.05);
+    --shadow-md: 0 4px 6px hsl(215 25% 27% / 0.07), 0 2px 4px hsl(215 25% 27% / 0.06);
+    --shadow-lg: 0 10px 15px hsl(215 25% 27% / 0.1), 0 4px 6px hsl(215 25% 27% / 0.05);
+    --shadow-xl: 0 20px 25px hsl(215 25% 27% / 0.1), 0 10px 10px hsl(215 25% 27% / 0.04);
+    --shadow-glow: 0 0 0 1px hsl(231 48% 48% / 0.05), 0 1px 3px hsl(231 48% 48% / 0.1);
+    
+    /* Animations */
+    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bouncy: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --radius: 0.5rem;
 
