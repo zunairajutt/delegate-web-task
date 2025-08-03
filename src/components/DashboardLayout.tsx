@@ -47,9 +47,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center">
-                  <Brain className="w-5 h-5 text-secondary-foreground" />
-                </div>
                 <div>
                   <h1 className="text-xl font-bold text-primary-foreground">
                     AI Delegation Dashboard
