@@ -15,7 +15,19 @@ import {
   AlertCircle,
   ArrowRight,
   RefreshCw,
-  X
+  X,
+  BarChart3,
+  PieChart,
+  Target,
+  Timer,
+  Eye,
+  EyeOff,
+  Maximize2,
+  Minimize2,
+  ThumbsUp,
+  ThumbsDown,
+  Share2,
+  Printer
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -24,14 +36,33 @@ interface PolicyComparison {
   current: string;
   recommended: string;
   improvement: 'better' | 'same' | 'worse';
+  impact: 'high' | 'medium' | 'low';
+}
+
+interface Recommendation {
+  id: string;
+  provider: string;
+  annualPremium: number;
+  monthlySavings: number;
+  rating: number;
+  coverageScore: number;
+  recommended: boolean;
+  features: string[];
+  pros: string[];
+  cons: string[];
+  aiReasoning: string[];
+  riskLevel: 'low' | 'medium' | 'high';
+  processingTime: string;
 }
 
 export default function FinalReview() {
   const [selectedRecommendation, setSelectedRecommendation] = useState("allstate");
   const [showAlternatives, setShowAlternatives] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [decisionMade, setDecisionMade] = useState(false);
   const { toast } = useToast();
 
-  const recommendations = [
+  const recommendations: Recommendation[] = [
     {
       id: "allstate",
       provider: "Allstate",
@@ -40,9 +71,18 @@ export default function FinalReview() {
       rating: 4.6,
       coverageScore: 95,
       recommended: true,
-      features: ["Fire Coverage", "Flood Protection", "Personal Property", "Liability Coverage"],
-      pros: ["Highest coverage score", "Excellent customer service", "24/7 claims support"],
-      cons: ["Slightly higher deductible"]
+      features: ["Fire Coverage", "Flood Protection", "Personal Property", "Liability Coverage", "24/7 Claims Support"],
+      pros: ["Highest coverage score", "Excellent customer service", "24/7 claims support", "No hidden fees"],
+      cons: ["Slightly higher deductible", "Premium pricing"],
+      aiReasoning: [
+        "Allstate offers the best balance of coverage and cost savings with 42% annual savings ($505 reduction)",
+        "Enhanced fire and flood coverage significantly exceeds your current policy limits",
+        "4.6/5 customer rating and 24/7 claims support provide superior service experience",
+        "All your specified requirements (fire coverage, State Farm exclusion) are met",
+        "Policy terms include no hidden fees and straightforward cancellation policy"
+      ],
+      riskLevel: 'low',
+      processingTime: "2-3 business days"
     },
     {
       id: "progressive",
@@ -52,9 +92,17 @@ export default function FinalReview() {
       rating: 4.3,
       coverageScore: 88,
       recommended: false,
-      features: ["Fire Coverage", "Personal Property", "Liability Coverage"],
-      pros: ["Lower deductible", "Easy online management", "Good mobile app"],
-      cons: ["No flood protection included"]
+      features: ["Fire Coverage", "Personal Property", "Liability Coverage", "Online Management"],
+      pros: ["Lower deductible", "Easy online management", "Good mobile app", "Fast claims processing"],
+      cons: ["No flood protection included", "Limited coverage options"],
+      aiReasoning: [
+        "Progressive offers competitive pricing with 35% savings",
+        "Excellent digital experience and mobile app functionality",
+        "Lower deductible provides immediate cost relief",
+        "Limited coverage compared to recommended option"
+      ],
+      riskLevel: 'medium',
+      processingTime: "1-2 business days"
     },
     {
       id: "geico",
@@ -64,34 +112,37 @@ export default function FinalReview() {
       rating: 4.1,
       coverageScore: 82,
       recommended: false,
-      features: ["Fire Coverage", "Personal Property", "Basic Liability"],
-      pros: ["Competitive pricing", "Fast claim processing"],
-      cons: ["Limited coverage options", "Basic customer support"]
+      features: ["Fire Coverage", "Personal Property", "Basic Liability", "Multi-policy Discounts"],
+      pros: ["Competitive pricing", "Fast claim processing", "Multi-policy discounts available"],
+      cons: ["Limited coverage options", "Basic customer support", "Lower coverage score"],
+      aiReasoning: [
+        "Geico provides the highest cost savings at 40%",
+        "Fast claims processing and competitive pricing",
+        "Lower coverage score may not meet all requirements",
+        "Basic customer support compared to competitors"
+      ],
+      riskLevel: 'medium',
+      processingTime: "1-2 business days"
     }
   ];
 
   const comparisonData: PolicyComparison[] = [
-    { feature: "Annual Premium", current: "$1,200", recommended: "$695", improvement: 'better' },
-    { feature: "Monthly Premium", current: "$100", recommended: "$58", improvement: 'better' },
-    { feature: "Deductible", current: "$500", recommended: "$750", improvement: 'worse' },
-    { feature: "Fire Coverage", current: "$50,000", recommended: "$75,000", improvement: 'better' },
-    { feature: "Flood Protection", current: "Not included", recommended: "Included", improvement: 'better' },
-    { feature: "Personal Property", current: "$25,000", recommended: "$40,000", improvement: 'better' },
-    { feature: "Liability Limit", current: "$100,000", recommended: "$200,000", improvement: 'better' },
-    { feature: "Customer Rating", current: "3.8/5", recommended: "4.6/5", improvement: 'better' }
-  ];
-
-  const aiReasoning = [
-    "Allstate offers the best balance of coverage and cost savings with 42% annual savings ($505 reduction)",
-    "Enhanced fire and flood coverage significantly exceeds your current policy limits",
-    "4.6/5 customer rating and 24/7 claims support provide superior service experience",
-    "All your specified requirements (fire coverage, State Farm exclusion) are met",
-    "Policy terms include no hidden fees and straightforward cancellation policy"
+    { feature: "Annual Premium", current: "$1,200", recommended: "$695", improvement: 'better', impact: 'high' },
+    { feature: "Monthly Premium", current: "$100", recommended: "$58", improvement: 'better', impact: 'high' },
+    { feature: "Deductible", current: "$500", recommended: "$750", improvement: 'worse', impact: 'medium' },
+    { feature: "Fire Coverage", current: "$50,000", recommended: "$75,000", improvement: 'better', impact: 'high' },
+    { feature: "Flood Protection", current: "Not included", recommended: "Included", improvement: 'better', impact: 'high' },
+    { feature: "Personal Property", current: "$25,000", recommended: "$40,000", improvement: 'better', impact: 'medium' },
+    { feature: "Liability Limit", current: "$100,000", recommended: "$200,000", improvement: 'better', impact: 'medium' },
+    { feature: "Customer Rating", current: "3.8/5", recommended: "4.6/5", improvement: 'better', impact: 'medium' },
+    { feature: "Claims Processing", current: "5-7 days", recommended: "24-48 hours", improvement: 'better', impact: 'low' },
+    { feature: "Policy Flexibility", current: "Standard", recommended: "Enhanced", improvement: 'better', impact: 'low' }
   ];
 
   const selectedPolicy = recommendations.find(r => r.id === selectedRecommendation);
 
   const handleApprove = () => {
+    setDecisionMade(true);
     toast({
       title: "Policy Approved!",
       description: `Processing your ${selectedPolicy?.provider} policy application. You'll receive confirmation shortly.`,
@@ -113,19 +164,37 @@ export default function FinalReview() {
     });
   };
 
+  const getImpactColor = (impact: string) => {
+    switch (impact) {
+      case 'high': return 'text-success';
+      case 'medium': return 'text-warning';
+      case 'low': return 'text-muted-foreground';
+      default: return 'text-foreground';
+    }
+  };
+
+  const getRiskColor = (risk: string) => {
+    switch (risk) {
+      case 'low': return 'text-success';
+      case 'medium': return 'text-warning';
+      case 'high': return 'text-destructive';
+      default: return 'text-foreground';
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Page Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-3xl font-bold text-foreground">Final Review & Decision</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <h1 className="text-4xl font-bold text-foreground">Final Review & Decision</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Review AI recommendations, compare options, and make your final decision with confidence.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Recommendation */}
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        {/* Main Content - 3 columns */}
+        <div className="xl:col-span-3 space-y-6">
           {/* Recommendation Summary */}
           <Card className="shadow-lg border-success border-2">
             <CardHeader className="bg-success-light">
@@ -137,14 +206,19 @@ export default function FinalReview() {
                   </CardTitle>
                   <CardDescription>Best match for your requirements and budget</CardDescription>
                 </div>
-                <Badge variant="secondary" className="bg-success text-success-foreground">
-                  Recommended
-                </Badge>
+                <div className="flex items-center space-x-2">
+                  <Badge variant="secondary" className="bg-success text-success-foreground">
+                    Recommended
+                  </Badge>
+                  <Badge variant="outline" className={`${getRiskColor(selectedPolicy?.riskLevel || 'low')}`}>
+                    {selectedPolicy?.riskLevel} Risk
+                  </Badge>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Key Metrics */}
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-4 gap-6">
                 <div className="text-center space-y-2">
                   <div className="text-3xl font-bold text-success">${selectedPolicy?.annualPremium}</div>
                   <div className="text-sm text-muted-foreground">Annual Premium</div>
@@ -169,6 +243,14 @@ export default function FinalReview() {
                       <Star key={i} className={`w-3 h-3 ${i < Math.floor(selectedPolicy?.rating || 0) ? 'text-warning fill-current' : 'text-muted'}`} />
                     ))}
                   </div>
+                </div>
+                <div className="text-center space-y-2">
+                  <div className="text-3xl font-bold text-foreground">{selectedPolicy?.coverageScore}%</div>
+                  <div className="text-sm text-muted-foreground">Coverage Score</div>
+                  <Badge variant="outline" className="text-xs">
+                    <Shield className="w-3 h-3 mr-1" />
+                    Excellent
+                  </Badge>
                 </div>
               </div>
 
@@ -223,16 +305,22 @@ export default function FinalReview() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="comparison" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="comparison">Side-by-Side</TabsTrigger>
                   <TabsTrigger value="reasoning">AI Reasoning</TabsTrigger>
+                  <TabsTrigger value="impact">Impact Analysis</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="comparison" className="space-y-4">
                   <div className="space-y-3">
                     {comparisonData.map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                        <div className="font-medium text-sm text-foreground">{item.feature}</div>
+                      <div key={index} className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className="font-medium text-sm text-foreground">{item.feature}</div>
+                          <Badge variant="outline" className={`text-xs ${getImpactColor(item.impact)}`}>
+                            {item.impact} impact
+                          </Badge>
+                        </div>
                         <div className="flex items-center space-x-4">
                           <div className="text-center">
                             <div className="text-xs text-muted-foreground">Current</div>
@@ -260,14 +348,31 @@ export default function FinalReview() {
                 
                 <TabsContent value="reasoning" className="space-y-4">
                   <div className="space-y-3">
-                    {aiReasoning.map((reason, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-3 bg-secondary-light rounded-lg">
+                    {selectedPolicy?.aiReasoning.map((reason, index) => (
+                      <div key={index} className="flex items-start space-x-3 p-4 bg-secondary-light rounded-lg">
                         <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center text-xs font-bold text-secondary-foreground flex-shrink-0">
                           {index + 1}
                         </div>
                         <p className="text-sm text-foreground">{reason}</p>
                       </div>
                     ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="impact" className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="text-center p-4 bg-success-light rounded-lg">
+                      <div className="text-2xl font-bold text-success">$505</div>
+                      <div className="text-sm text-muted-foreground">Annual Savings</div>
+                    </div>
+                    <div className="text-center p-4 bg-primary-light rounded-lg">
+                      <div className="text-2xl font-bold text-primary">+23%</div>
+                      <div className="text-sm text-muted-foreground">Coverage Improvement</div>
+                    </div>
+                    <div className="text-center p-4 bg-secondary-light rounded-lg">
+                      <div className="text-2xl font-bold text-secondary">+0.8★</div>
+                      <div className="text-sm text-muted-foreground">Service Rating</div>
+                    </div>
                   </div>
                 </TabsContent>
               </Tabs>
@@ -302,12 +407,17 @@ export default function FinalReview() {
                           ))}
                         </div>
                       </div>
-                      <Button
-                        variant={selectedRecommendation === policy.id ? "default" : "outline"}
-                        size="sm"
-                      >
-                        {selectedRecommendation === policy.id ? "Selected" : "Select"}
-                      </Button>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline" className={`text-xs ${getRiskColor(policy.riskLevel)}`}>
+                          {policy.riskLevel} Risk
+                        </Badge>
+                        <Button
+                          variant={selectedRecommendation === policy.id ? "default" : "outline"}
+                          size="sm"
+                        >
+                          {selectedRecommendation === policy.id ? "Selected" : "Select"}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -316,7 +426,7 @@ export default function FinalReview() {
           )}
         </div>
 
-        {/* Action Panel */}
+        {/* Action Panel - 1 column */}
         <div className="space-y-6">
           {/* Decision Panel */}
           <Card className="shadow-lg border-card-border">
@@ -331,9 +441,10 @@ export default function FinalReview() {
                   variant="ai"
                   size="lg"
                   className="w-full"
+                  disabled={decisionMade}
                 >
                   <CheckCircle className="w-5 h-5 mr-2" />
-                  Approve & Finalize
+                  {decisionMade ? "Decision Made" : "Approve & Finalize"}
                 </Button>
                 
                 <Button
@@ -356,14 +467,30 @@ export default function FinalReview() {
 
               <Separator />
 
-              <Button
-                onClick={handleExport}
-                variant="minimal"
-                className="w-full"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download Full Report
-              </Button>
+              <div className="space-y-2">
+                <Button
+                  onClick={handleExport}
+                  variant="minimal"
+                  className="w-full"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Full Report
+                </Button>
+                <Button
+                  variant="minimal"
+                  className="w-full"
+                >
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share Analysis
+                </Button>
+                <Button
+                  variant="minimal"
+                  className="w-full"
+                >
+                  <Printer className="w-4 h-4 mr-2" />
+                  Print Summary
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
